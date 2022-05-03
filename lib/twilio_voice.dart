@@ -125,6 +125,11 @@ class TwilioVoice {
         deviceTokenChanged!(token);
       }
       return CallEvent.log;
+    } else if (state.startsWith("LOG|") &&
+        state.contains("Error") &&
+        state.contains("Decline")) {
+      print(state);
+      return CallEvent.decline;
     } else if (state.startsWith("LOG|")) {
       List<String> tokens = state.split('|');
       print(tokens[1]);
@@ -180,6 +185,8 @@ class TwilioVoice {
         return CallEvent.speakerOn;
       case 'Speaker Off':
         return CallEvent.speakerOff;
+      case 'Decline':
+        return CallEvent.decline;
       default:
         print('$state is not a valid CallState.');
         throw ArgumentError('$state is not a valid CallState.');
